@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Action Logs</title>
+</head>
+
+<body>
+    <h1>All Admin Action Logs</h1>
+
+    <!-- Display all admin logs -->
+    <ul>
+        {% for log in logs %}
+        <li>
+            ID: {{ log.log_id }} -
+            Admin: {{ log.admin }} -
+            Action: {{ log.action_type }} -
+            Table: {{ log.table_name }} -
+            Record ID: {{ log.record_id }} -
+            Time: {{ log.time_stamp }}
+        </li>
+        {% empty %}
+        <li>No logs found.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h2>Add New Admin Action Log</h2>
+    <!-- Form to add a new admin log -->
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="admin">Select Admin:</label>
+        <select name="admin" required>
+            {% for admin in admins %}
+            <option value="{{ admin.admin_id }}">{{ admin.first_name }} {{ admin.last_name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="action_type">Action Type:</label>
+        <input type="text" name="action_type" required><br><br>
+
+        <label for="table_name">Table Name:</label>
+        <input type="text" name="table_name" required><br><br>
+
+        <label for="record_id">Record ID:</label>
+        <input type="number" name="record_id" required><br><br>
+
+        <button type="submit">Add Log</button>
+    </form>
+</body>
+
+</html>

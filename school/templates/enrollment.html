@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Enrollments</title>
+</head>
+
+<body>
+    <h1>Enroll a Student in a Class</h1>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label for="student">Student:</label>
+        <select name="student" id="student" required>
+            {% for student in students %}
+            <option value="{{ student.id }}">{{ student }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="class_assigned">Class:</label>
+        <select name="class_assigned" id="class_assigned" required>
+            {% for c in classes %}
+            <option value="{{ c.class_id }}">{{ c.class_name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="date_enrolled">Date Enrolled:</label>
+        <input type="date" id="date_enrolled" name="date_enrolled" required>
+
+        <button type="submit">Enroll</button>
+    </form>
+
+    <hr>
+
+    <h2>Existing Enrollments</h2>
+    <ul>
+        {% for e in enrollments %}
+        <li>
+            {{ e.enrollment_id }} - {{ e.student }} → {{ e.class_assigned }} ({{ e.date_enrolled }})
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>

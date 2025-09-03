@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Latest Quiz</title>
+</head>
+
+<body>
+    <h1>Latest Quiz</h1>
+
+    {% if quiz %}
+    <table border="1" cellspacing="0" cellpadding="8">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date Created</th>
+                <th>Recent</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ quiz.id }}</td>
+                <td>{{ quiz.title }}</td>
+                <td>{{ quiz.description }}</td>
+                <td>{{ quiz.date_created }}</td>
+                <td>{{ quiz.recent }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% else %}
+    <p>No quiz found.</p>
+    {% endif %}
+</body>
+
+</html>

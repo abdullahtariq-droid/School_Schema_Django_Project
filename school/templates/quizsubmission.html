@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Quiz Submissions</title>
+</head>
+
+<body>
+    <h1>All Quiz Submissions</h1>
+
+    <!-- Display all quiz submissions -->
+    <ul>
+        {% for submission in submissions %}
+        <li>
+            ID: {{ submission.id }} -
+            Student: {{ submission.student }} -
+            Quiz: {{ submission.quiz }} -
+            Submitted At: {{ submission.submitted_at }} -
+            Score: {{ submission.score }}
+        </li>
+        {% empty %}
+        <li>No submissions found.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h2>Add New Submission</h2>
+    <!-- Form to add a new submission -->
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="quiz">Select Quiz:</label>
+        <select name="quiz" required>
+            {% for quiz in quizzes %}
+            <option value="{{ quiz.quiz_id }}">{{ quiz.title }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="student">Select Student:</label>
+        <select name="student" required>
+            {% for student in students %}
+            <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="score">Score:</label>
+        <input type="number" name="score" step="0.01" min="0" required><br><br>
+
+        <button type="submit">Add Submission</button>
+    </form>
+</body>
+
+</html>

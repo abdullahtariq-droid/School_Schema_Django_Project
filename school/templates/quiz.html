@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Quizzes</title>
+</head>
+
+<body>
+    <h1>All Quizzes</h1>
+
+    <!-- Display list of existing quizzes -->
+    <ul>
+        {% for quiz in quizzes %}
+        <li>
+            {{ quiz.quiz_id }} - {{ quiz.title }}
+            | Subject: {{ quiz.subject }}
+            | Created by: {{ quiz.created_by }}
+            | Date: {{ quiz.date_created }}
+        </li>
+        {% empty %}
+        <li>No quizzes available.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h2>Add New Quiz</h2>
+    <!-- Quiz creation form -->
+    <form method="post">
+        {% csrf_token %}
+        <label for="title">Quiz Title:</label>
+        <input type="text" name="title" required><br><br>
+
+        <label for="subject">Subject:</label>
+        <select name="subject" required>
+            {% for subj in subjects %}
+            <option value="{{ subj.id }}">{{ subj.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="created_by">Created By (Teacher):</label>
+        <select name="created_by" required>
+            {% for teacher in teachers %}
+            <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit">Add Quiz</button>
+    </form>
+</body>
+
+</html>

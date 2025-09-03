@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Teacher-Subject Assignments</title>
+</head>
+
+<body>
+    <h1>Teacher-Subject Assignments</h1>
+
+    {% if teachersubjects %}
+    <ul>
+        {% for ts in teachersubjects %}
+        <li>
+            <strong>ID:</strong> {{ ts.id }} |
+            <strong>Teacher:</strong> {{ ts.teacher }} |
+            <strong>Subject:</strong> {{ ts.subject }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No teacher-subject assignments found.</p>
+    {% endif %}
+</body>
+
+</html>

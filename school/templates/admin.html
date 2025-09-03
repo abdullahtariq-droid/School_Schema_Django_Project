@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admins</title>
+</head>
+
+<body>
+    <h1>All Admins</h1>
+
+    <!-- Display all admins -->
+    <ul>
+        {% for admin in admins %}
+        <li>
+            ID: {{ admin.admin_id }} -
+            Name: {{ admin.first_name }} {{ admin.last_name }} -
+            Email: {{ admin.email }} -
+            Phone: {{ admin.phone }} -
+            Role: {{ admin.role }}
+        </li>
+        {% empty %}
+        <li>No admins found.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h2>Add New Admin</h2>
+    <!-- Form to add a new admin -->
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" required><br><br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br><br>
+
+        <label for="phone">Phone:</label>
+        <input type="text" name="phone" required><br><br>
+
+        <label for="role">Role:</label>
+        <input type="text" name="role" value="superadmin"><br><br>
+
+        <button type="submit">Add Admin</button>
+    </form>
+</body>
+
+</html>

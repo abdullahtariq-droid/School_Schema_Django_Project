@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Quiz Answers</title>
+</head>
+
+<body>
+    <h1>All Quiz Answers</h1>
+
+    <!-- Display all quiz answers -->
+    <ul>
+        {% for answer in answers %}
+        <li>
+            ID: {{ answer.id }} -
+            Submission: {{ answer.submission }} -
+            Question: {{ answer.question }} -
+            Selected Option: {{ answer.selected_option }}
+        </li>
+        {% empty %}
+        <li>No answers found.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h2>Add New Quiz Answer</h2>
+    <!-- Form to add a new quiz answer -->
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="submission">Select Submission:</label>
+        <select name="submission" required>
+            {% for submission in submissions %}
+            <option value="{{ submission.id }}">{{ submission }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="question">Select Question:</label>
+        <select name="question" required>
+            {% for question in questions %}
+            <option value="{{ question.id }}">{{ question.question_text }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="selected_option">Select Option:</label>
+        <select name="selected_option">
+            <option value="">-- None --</option>
+            {% for option in options %}
+            <option value="{{ option.id }}">{{ option.option_text }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit">Add Answer</button>
+    </form>
+</body>
+
+</html>

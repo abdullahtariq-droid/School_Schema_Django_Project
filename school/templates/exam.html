@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Exams</title>
+</head>
+
+<body>
+    <h1>All Exams</h1>
+
+    <!-- Display list of existing exams -->
+    <ul>
+        {% for exam in exams %}
+        <li>
+            {{ exam.exam_id }} - {{ exam.name }}
+            (Date: {{ exam.date }})
+            | Class: {{ exam.class_assigned.class_name }}
+            | Created by: {{ exam.created_by.admin_name }}
+        </li>
+        {% empty %}
+        <li>No exams available.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h2>Add New Exam</h2>
+    <!-- Exam creation form -->
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Exam Name:</label>
+        <input type="text" name="name" required><br><br>
+
+        <label for="date">Date:</label>
+        <input type="date" name="date" required><br><br>
+
+        <label for="class_assigned">Class:</label>
+        <select name="class_assigned" required>
+            {% for cls in classes %}
+            <option value="{{ cls.class_id }}">{{ cls.class_name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="created_by">Created By (Admin):</label>
+        <select name="created_by" required>
+            {% for admin in admins %}
+            <option value="{{ admin.admin_id }}">{{ admin.admin_name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit">Add Exam</button>
+    </form>
+</body>
+
+</html>

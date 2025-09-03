@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Quiz Questions</title>
+</head>
+
+<body>
+    <h1>All Quiz Questions</h1>
+
+    <!-- Display list of quiz questions -->
+    <ul>
+        {% for question in questions %}
+        <li>
+            {{ question.id }} - {{ question.quiz }} : {{ question.question_text }}
+        </li>
+        {% empty %}
+        <li>No questions available.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h2>Add New Question</h2>
+    <!-- Question creation form -->
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="quiz">Select Quiz:</label>
+        <select name="quiz" required>
+            {% for quiz in quizzes %}
+            <option value="{{ quiz.quiz_id }}">{{ quiz.title }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="question_text">Question:</label><br>
+        <textarea name="question_text" rows="4" cols="50" required></textarea><br><br>
+
+        <button type="submit">Add Question</button>
+    </form>
+</body>
+
+</html>

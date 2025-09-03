@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Teachers</title>
+</head>
+
+<body>
+    <h1>All Teachers</h1>
+
+    {% if teachers %}
+    <ul>
+        {% for teacher in teachers %}
+        <li>
+            <strong>ID:</strong> {{ teacher.teacher_id }} |
+            <strong>Name:</strong> {{ teacher.first_name }} {{ teacher.last_name }} |
+            <strong>Gender:</strong> {{ teacher.gender }} |
+            <strong>Phone:</strong> {{ teacher.phone }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No teachers found.</p>
+    {% endif %}
+</body>
+
+</html>
