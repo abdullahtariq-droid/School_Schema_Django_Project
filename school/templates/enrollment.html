@@ -1,45 +1,70 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Enrollments</title>
-</head>
+{% block title %}Enrollments{% endblock %}
 
-<body>
-    <h1>Enroll a Student in a Class</h1>
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">Enroll a Student in a Class</h1>
 
-    <form method="POST" action="">
+    <!-- Enrollment Form -->
+    <form method="POST" action="" class="row g-3 mb-5">
         {% csrf_token %}
-        <label for="student">Student:</label>
-        <select name="student" id="student" required>
-            {% for student in students %}
-            <option value="{{ student.id }}">{{ student }}</option>
-            {% endfor %}
-        </select>
 
-        <label for="class_assigned">Class:</label>
-        <select name="class_assigned" id="class_assigned" required>
-            {% for c in classes %}
-            <option value="{{ c.class_id }}">{{ c.class_name }}</option>
-            {% endfor %}
-        </select>
+        <div class="col-md-4">
+            <label for="student" class="form-label">Student:</label>
+            <select name="student" id="student" class="form-select" required>
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <label for="date_enrolled">Date Enrolled:</label>
-        <input type="date" id="date_enrolled" name="date_enrolled" required>
+        <div class="col-md-4">
+            <label for="class_assigned" class="form-label">Class:</label>
+            <select name="class_assigned" id="class_assigned" class="form-select" required>
+                {% for c in classes %}
+                <option value="{{ c.class_id }}">{{ c.class_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <button type="submit">Enroll</button>
+        <div class="col-md-4">
+            <label for="date_enrolled" class="form-label">Date Enrolled:</label>
+            <input type="date" id="date_enrolled" name="date_enrolled" class="form-control" required>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Enroll</button>
+        </div>
     </form>
 
-    <hr>
-
-    <h2>Existing Enrollments</h2>
-    <ul>
-        {% for e in enrollments %}
-        <li>
-            {{ e.enrollment_id }} - {{ e.student }} → {{ e.class_assigned }} ({{ e.date_enrolled }})
-        </li>
-        {% endfor %}
-    </ul>
-</body>
-
-</html>
+    <!-- Existing Enrollments -->
+    <h2 class="mb-3">Existing Enrollments</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Enrollment ID</th>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Date Enrolled</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in enrollments %}
+                <tr>
+                    <td>{{ e.enrollment_id }}</td>
+                    <td>{{ e.student }}</td>
+                    <td>{{ e.class_assigned }}</td>
+                    <td>{{ e.date_enrolled }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No enrollments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

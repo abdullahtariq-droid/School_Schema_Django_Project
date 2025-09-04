@@ -1,54 +1,78 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Admin Action Logs</title>
-</head>
+{% block title %}Admin Action Logs{% endblock %}
 
-<body>
-    <h1>All Admin Action Logs</h1>
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">All Admin Action Logs</h1>
 
-    <!-- Display all admin logs -->
-    <ul>
-        {% for log in logs %}
-        <li>
-            ID: {{ log.log_id }} -
-            Admin: {{ log.admin }} -
-            Action: {{ log.action_type }} -
-            Table: {{ log.table_name }} -
-            Record ID: {{ log.record_id }} -
-            Time: {{ log.time_stamp }}
-        </li>
-        {% empty %}
-        <li>No logs found.</li>
-        {% endfor %}
-    </ul>
+    <!-- Display all admin logs in a Bootstrap table -->
+    <div class="table-responsive mb-5">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Admin</th>
+                    <th>Action</th>
+                    <th>Table</th>
+                    <th>Record ID</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.log_id }}</td>
+                    <td>{{ log.admin }}</td>
+                    <td>{{ log.action_type }}</td>
+                    <td>{{ log.table_name }}</td>
+                    <td>{{ log.record_id }}</td>
+                    <td>{{ log.time_stamp }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No logs found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <hr>
 
-    <h2>Add New Admin Action Log</h2>
+    <h2 class="mb-3">Add New Admin Action Log</h2>
+
     <!-- Form to add a new admin log -->
-    <form method="post">
+    <form method="post" class="row g-3">
         {% csrf_token %}
 
-        <label for="admin">Select Admin:</label>
-        <select name="admin" required>
-            {% for admin in admins %}
-            <option value="{{ admin.admin_id }}">{{ admin.first_name }} {{ admin.last_name }}</option>
-            {% endfor %}
-        </select><br><br>
+        <div class="col-md-6">
+            <label for="admin" class="form-label">Select Admin:</label>
+            <select name="admin" class="form-select" required>
+                {% for admin in admins %}
+                <option value="{{ admin.admin_id }}">{{ admin.first_name }} {{ admin.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <label for="action_type">Action Type:</label>
-        <input type="text" name="action_type" required><br><br>
+        <div class="col-md-6">
+            <label for="action_type" class="form-label">Action Type:</label>
+            <input type="text" name="action_type" class="form-control" required>
+        </div>
 
-        <label for="table_name">Table Name:</label>
-        <input type="text" name="table_name" required><br><br>
+        <div class="col-md-6">
+            <label for="table_name" class="form-label">Table Name:</label>
+            <input type="text" name="table_name" class="form-control" required>
+        </div>
 
-        <label for="record_id">Record ID:</label>
-        <input type="number" name="record_id" required><br><br>
+        <div class="col-md-6">
+            <label for="record_id" class="form-label">Record ID:</label>
+            <input type="number" name="record_id" class="form-control" required>
+        </div>
 
-        <button type="submit">Add Log</button>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Add Log</button>
+        </div>
     </form>
-</body>
-
-</html>
+</div>
+{% endblock %}

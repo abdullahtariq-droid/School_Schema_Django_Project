@@ -1,27 +1,40 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Teachers</title>
-</head>
+{% block title %}Teachers{% endblock %}
 
-<body>
-    <h1>All Teachers</h1>
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">All Teachers</h1>
 
     {% if teachers %}
-    <ul>
-        {% for teacher in teachers %}
-        <li>
-            <strong>ID:</strong> {{ teacher.teacher_id }} |
-            <strong>Name:</strong> {{ teacher.first_name }} {{ teacher.last_name }} |
-            <strong>Gender:</strong> {{ teacher.gender }} |
-            <strong>Phone:</strong> {{ teacher.phone }}
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for teacher in teachers %}
+                <tr>
+                    <td>{{ teacher.teacher_id }}</td>
+                    <td>{{ teacher.first_name }}</td>
+                    <td>{{ teacher.last_name }}</td>
+                    <td>{{ teacher.gender }}</td>
+                    <td>{{ teacher.phone }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
-    <p>No teachers found.</p>
+    <div class="alert alert-warning" role="alert">
+        No teachers found.
+    </div>
     {% endif %}
-</body>
-
-</html>
+</div>
+{% endblock %}

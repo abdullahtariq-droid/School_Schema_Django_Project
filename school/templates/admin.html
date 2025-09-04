@@ -1,52 +1,76 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Admins</title>
-</head>
+{% block title %}Admins{% endblock %}
 
-<body>
-    <h1>All Admins</h1>
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">All Admins</h1>
 
-    <!-- Display all admins -->
-    <ul>
-        {% for admin in admins %}
-        <li>
-            ID: {{ admin.admin_id }} -
-            Name: {{ admin.first_name }} {{ admin.last_name }} -
-            Email: {{ admin.email }} -
-            Phone: {{ admin.phone }} -
-            Role: {{ admin.role }}
-        </li>
-        {% empty %}
-        <li>No admins found.</li>
-        {% endfor %}
-    </ul>
+    <!-- Display all admins in a Bootstrap table -->
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for admin in admins %}
+            <tr>
+                <td>{{ admin.admin_id }}</td>
+                <td>{{ admin.first_name }}</td>
+                <td>{{ admin.last_name }}</td>
+                <td>{{ admin.email }}</td>
+                <td>{{ admin.phone }}</td>
+                <td>{{ admin.role }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No admins found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    <hr>
+    <hr class="my-4">
 
-    <h2>Add New Admin</h2>
-    <!-- Form to add a new admin -->
-    <form method="post">
+    <h2 class="mb-3">Add New Admin</h2>
+    <!-- Bootstrap form -->
+    <form method="post" class="row g-3">
         {% csrf_token %}
 
-        <label for="first_name">First Name:</label>
-        <input type="text" name="first_name" required><br><br>
+        <div class="col-md-6">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" name="first_name" class="form-control" required>
+        </div>
 
-        <label for="last_name">Last Name:</label>
-        <input type="text" name="last_name" required><br><br>
+        <div class="col-md-6">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" name="last_name" class="form-control" required>
+        </div>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" required><br><br>
+        <div class="col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
 
-        <label for="phone">Phone:</label>
-        <input type="text" name="phone" required><br><br>
+        <div class="col-md-6">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" name="phone" class="form-control" required>
+        </div>
 
-        <label for="role">Role:</label>
-        <input type="text" name="role" value="superadmin"><br><br>
+        <div class="col-md-6">
+            <label for="role" class="form-label">Role</label>
+            <input type="text" name="role" class="form-control" value="superadmin">
+        </div>
 
-        <button type="submit">Add Admin</button>
+        <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary">Add Admin</button>
+        </div>
     </form>
-</body>
-
-</html>
+</div>
+{% endblock %}

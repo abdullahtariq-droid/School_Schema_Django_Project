@@ -156,8 +156,10 @@ class ExamCreateUpdateSerializer(serializers.ModelSerializer):
 
 # ---- Quiz and its related models ----
 class QuizSerializer(BaseSerializer):
-    subject = serializers.StringRelatedField(read_only=True)
-    created_by = serializers.StringRelatedField(read_only=True)
+    subject = serializers.StringRelatedField(
+        source='subject.subject_name', read_only=True)
+    created_by = serializers.StringRelatedField(
+        source='created_by.get_full_name', read_only=True)
 
     class Meta(BaseSerializer.Meta):
         model = Quiz
@@ -176,10 +178,10 @@ class QuizCreateUpdateSerializer(serializers.ModelSerializer):
         read_only_fields = ['quiz_id', 'date_created']
 
 
-class QuizQuestionSerializer(BaseSerializer):
-    quiz = serializers.StringRelatedField(read_only=True)
+class QuizQuestionSerializer(serializers.ModelSerializer):
+    quiz = serializers.PrimaryKeyRelatedField(queryset=Quiz.objects.all())
 
-    class Meta(BaseSerializer.Meta):
+    class Meta():
         model = QuizQuestion
         fields = ['id', 'quiz', 'question_text']
 

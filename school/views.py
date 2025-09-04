@@ -1,4 +1,6 @@
 
+from django.urls import reverse
+from django.shortcuts import redirect
 from rest_framework import viewsets
 from .models import Admin, AdminActionLog, Student, Teacher, Subject, TeacherSubject, Class, Enrollment, Exam, Quiz, QuizQuestion, QuizOption, QuizSubmission, QuizAnswer, SeniorTeacher, MaleStudent, LatestQuiz
 from .serializers import (
@@ -169,18 +171,41 @@ class QuizViewSet(TemplateViewSetMixin, BaseViewSet):
     serializer_class = QuizSerializer
     create_update_serializer = QuizCreateUpdateSerializer
     template_name = 'quiz.html'
-    # <--- Force template rendering only
     renderer_classes = [TemplateHTMLRenderer]
 
     def list(self, request, *args, **kwargs):
-        quizzes = Quiz.objects.all()
+        quizzes = Quiz.objects.select_related('subject', 'created_by').all()
         subjects = Subject.objects.all()
         teachers = Teacher.objects.all()
+        serializer = self.get_serializer(quizzes, many=True)
         return Response({
             'quizzes': quizzes,
             'subjects': subjects,
             'teachers': teachers
         }, template_name=self.template_name)
+
+    def create(self, request, *args, **kwargs):
+        print(f"Creating a new quiz...{request.POST}")
+        serializer = QuizCreateUpdateSerializer(data=request.POST)
+
+        if serializer.is_valid():
+            print("Validated data:", serializer.validated_data)  # ✅ Use this
+            serializer.save()
+            # Redirect to the quiz list page after successful creation
+            return redirect(reverse('quiz-list'))  # Use your URL name
+        else:
+            print("Errors:", serializer.errors)
+            quizzes = Quiz.objects.all()
+            subjects = Subject.objects.all()
+            teachers = Teacher.objects.all()
+            quizzes_serializer = self.get_serializer(quizzes, many=True)
+            print(quizzes_serializer.data)
+            return Response({
+                'quizzes': quizzes_serializer.data,
+                'subjects': subjects,
+                'teachers': teachers,
+                'errors': serializer.errors
+            }, template_name=self.template_name)
 
 
 class QuizQuestionViewSet(TemplateViewSetMixin, BaseViewSet):
@@ -192,12 +217,26 @@ class QuizQuestionViewSet(TemplateViewSetMixin, BaseViewSet):
     renderer_classes = [TemplateHTMLRenderer]
 
     def list(self, request, *args, **kwargs):
-        questions = QuizQuestion.objects.all()
+        questions = QuizQuestion.objects.select_related('quiz').all()
         quizzes = Quiz.objects.all()
         return Response({
             'questions': questions,
             'quizzes': quizzes
         }, template_name=self.template_name)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.create_update_serializer(data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            return redirect(request.path)  # adjust URL name
+        else:
+            questions = QuizQuestion.objects.select_related('quiz').all()
+            quizzes = Quiz.objects.all()
+            return Response({
+                'questions': questions,
+                'quizzes': quizzes,
+                'errors': serializer.errors
+            }, template_name=self.template_name)
 
 
 class QuizOptionViewSet(TemplateViewSetMixin, BaseViewSet):
@@ -283,8 +322,3 @@ class LatestQuizViewSet(TemplateViewSetMixin, BaseViewSet):
     template_name = 'latestquizview.html'
     # <--- Force template rendering only
     renderer_classes = [TemplateHTMLRenderer]
-
-    def list(self, request, *args, **kwargs):
-        quiz = self.get_queryset().first()
-        serializer = self.get_serializer(quiz)
-        return Response({'quiz': serializer.data}, template_name='latest_quiz.html')

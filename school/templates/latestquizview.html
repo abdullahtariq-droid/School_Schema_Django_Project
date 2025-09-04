@@ -1,37 +1,38 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Latest Quiz</title>
-</head>
+{% block title %}Latest Quiz{% endblock %}
 
-<body>
-    <h1>Latest Quiz</h1>
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Latest Quiz</h1>
 
     {% if quiz %}
-    <table border="1" cellspacing="0" cellpadding="8">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Date Created</th>
-                <th>Recent</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ quiz.id }}</td>
-                <td>{{ quiz.title }}</td>
-                <td>{{ quiz.description }}</td>
-                <td>{{ quiz.date_created }}</td>
-                <td>{{ quiz.recent }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Date Created</th>
+                    <th>Recent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ quiz.id }}</td>
+                    <td>{{ quiz.title }}</td>
+                    <td>{{ quiz.description|default:"N/A" }}</td>
+                    <td>{{ quiz.date_created|date:"F j, Y, g:i a" }}</td>
+                    <td>{{ quiz.recent|date:"F j, Y, g:i a" }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     {% else %}
-    <p>No quiz found.</p>
+    <div class="alert alert-warning" role="alert">
+        No quiz found.
+    </div>
     {% endif %}
-</body>
-
-</html>
+</div>
+{% endblock %}

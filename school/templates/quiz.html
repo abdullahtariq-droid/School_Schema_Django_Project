@@ -1,52 +1,80 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Quizzes</title>
-</head>
+{% block title %}All Quizzes{% endblock %}
 
-<body>
-    <h1>All Quizzes</h1>
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">All Quizzes</h1>
 
-    <!-- Display list of existing quizzes -->
-    <ul>
-        {% for quiz in quizzes %}
-        <li>
-            {{ quiz.quiz_id }} - {{ quiz.title }}
-            | Subject: {{ quiz.subject }}
-            | Created by: {{ quiz.created_by }}
-            | Date: {{ quiz.date_created }}
-        </li>
-        {% empty %}
-        <li>No quizzes available.</li>
-        {% endfor %}
-    </ul>
+    {% if quizzes %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Subject</th>
+                    <th>Created By</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.quiz_id }}</td>
+                    <td>{{ quiz.title }}</td>
+                    <td>{{ quiz.subject.subject_name }}</td>
+                    <td>{{ quiz.created_by.first_name }} {{ quiz.created_by.last_name }}</td>
+                    <td>{{ quiz.date_created }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-warning" role="alert">
+        No quizzes available.
+    </div>
+    {% endif %}
 
-    <hr>
+    <hr class="my-4">
 
-    <h2>Add New Quiz</h2>
-    <!-- Quiz creation form -->
-    <form method="post">
+    <h2 class="mb-3">Add New Quiz</h2>
+    <form method="post" action="{% url 'quiz-list' %}" class="row g-3">
         {% csrf_token %}
-        <label for="title">Quiz Title:</label>
-        <input type="text" name="title" required><br><br>
-
-        <label for="subject">Subject:</label>
-        <select name="subject" required>
-            {% for subj in subjects %}
-            <option value="{{ subj.id }}">{{ subj.name }}</option>
-            {% endfor %}
-        </select><br><br>
-
-        <label for="created_by">Created By (Teacher):</label>
-        <select name="created_by" required>
-            {% for teacher in teachers %}
-            <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
-            {% endfor %}
-        </select><br><br>
-
-        <button type="submit">Add Quiz</button>
+        <div class="col-md-4">
+            <label for="title" class="form-label">Quiz Title</label>
+            <input type="text" class="form-control" name="title" id="title" required>
+        </div>
+        <div class="col-md-4">
+            <label for="subject" class="form-label">Subject</label>
+            <select name="subject" class="form-select" id="subject" required>
+                {% for subj in subjects %}
+                <option value="{{ subj.subject_id }}">{{ subj.subject_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="created_by" class="form-label">Created By (Teacher)</label>
+            <select name="created_by" class="form-select" id="created_by" required>
+                {% for teacher in teachers %}
+                <option value="{{ teacher.teacher_id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary">Add Quiz</button>
+        </div>
+        {% if errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field, msgs in errors.items %}
+                <li>{{ field }}: {{ msgs|join:", " }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </form>
-</body>
 
-</html>
+</div>
+{% endblock %}

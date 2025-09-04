@@ -1,55 +1,77 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Exams</title>
-</head>
+{% block title %}Exams{% endblock %}
 
-<body>
-    <h1>All Exams</h1>
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">All Exams</h1>
 
-    <!-- Display list of existing exams -->
-    <ul>
-        {% for exam in exams %}
-        <li>
-            {{ exam.exam_id }} - {{ exam.name }}
-            (Date: {{ exam.date }})
-            | Class: {{ exam.class_assigned.class_name }}
-            | Created by: {{ exam.created_by.admin_name }}
-        </li>
-        {% empty %}
-        <li>No exams available.</li>
-        {% endfor %}
-    </ul>
+    <!-- Existing Exams Table -->
+    <div class="table-responsive mb-5">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Exam ID</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Class</th>
+                    <th>Created By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exam in exams %}
+                <tr>
+                    <td>{{ exam.exam_id }}</td>
+                    <td>{{ exam.name }}</td>
+                    <td>{{ exam.date }}</td>
+                    <td>{{ exam.class_assigned.class_name }}</td>
+                    <td>{{ exam.created_by.first_name }} {{ exam.created_by.last_name }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No exams available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <hr>
-
-    <h2>Add New Exam</h2>
-    <!-- Exam creation form -->
-    <form method="post">
+    <!-- Add New Exam Form -->
+    <h2 class="mb-3">Add New Exam</h2>
+    <form method="post" class="row g-3">
         {% csrf_token %}
-        <label for="name">Exam Name:</label>
-        <input type="text" name="name" required><br><br>
 
-        <label for="date">Date:</label>
-        <input type="date" name="date" required><br><br>
+        <div class="col-md-4">
+            <label for="name" class="form-label">Exam Name:</label>
+            <input type="text" name="name" id="name" class="form-control" required>
+        </div>
 
-        <label for="class_assigned">Class:</label>
-        <select name="class_assigned" required>
-            {% for cls in classes %}
-            <option value="{{ cls.class_id }}">{{ cls.class_name }}</option>
-            {% endfor %}
-        </select><br><br>
+        <div class="col-md-4">
+            <label for="date" class="form-label">Date:</label>
+            <input type="date" name="date" id="date" class="form-control" required>
+        </div>
 
-        <label for="created_by">Created By (Admin):</label>
-        <select name="created_by" required>
-            {% for admin in admins %}
-            <option value="{{ admin.admin_id }}">{{ admin.admin_name }}</option>
-            {% endfor %}
-        </select><br><br>
+        <div class="col-md-4">
+            <label for="class_assigned" class="form-label">Class:</label>
+            <select name="class_assigned" id="class_assigned" class="form-select" required>
+                {% for cls in classes %}
+                <option value="{{ cls.class_id }}">{{ cls.class_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <button type="submit">Add Exam</button>
+        <div class="col-md-4">
+            <label for="created_by" class="form-label">Created By (Admin):</label>
+            <select name="created_by" id="created_by" class="form-select" required>
+                {% for admin in admins %}
+                <option value="{{ admin.admin_id }}">{{ admin.first_name }} {{ admin.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary mt-3">Add Exam</button>
+        </div>
     </form>
-</body>
-
-</html>
+</div>
+{% endblock %}

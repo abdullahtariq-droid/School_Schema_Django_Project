@@ -1,26 +1,36 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Teacher-Subject Assignments</title>
-</head>
+{% block title %}Teacher-Subject Assignments{% endblock %}
 
-<body>
-    <h1>Teacher-Subject Assignments</h1>
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Teacher-Subject Assignments</h1>
 
     {% if teachersubjects %}
-    <ul>
-        {% for ts in teachersubjects %}
-        <li>
-            <strong>ID:</strong> {{ ts.id }} |
-            <strong>Teacher:</strong> {{ ts.teacher }} |
-            <strong>Subject:</strong> {{ ts.subject }}
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Teacher</th>
+                    <th>Subject</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ts in teachersubjects %}
+                <tr>
+                    <td>{{ ts.id }}</td>
+                    <td>{{ ts.teacher }}</td>
+                    <td>{{ ts.subject }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
-    <p>No teacher-subject assignments found.</p>
+    <div class="alert alert-warning" role="alert">
+        No teacher-subject assignments found.
+    </div>
     {% endif %}
-</body>
-
-</html>
+</div>
+{% endblock %}
